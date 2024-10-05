@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright-test-coverage';
 
 //passes!
-test('home page', async ({ page }) => {
+test('load home page', async ({ page }) => {
   await page.goto('/');
 
   expect(await page.title()).toBe('JWT Pizza');
@@ -100,6 +100,69 @@ test('purchase with login', async ({ page }) => {
   // Check balance
   await expect(page.getByText('0.008')).toBeVisible();
 });
+
+//should work!
+test('register new user', async ({ page }) => {
+  await page.route('*/**/api/auth', async (route) => {
+    const regReq = { name: 'warren', email: '123@gmail.com', password: '123' };
+    const regRes = { user: { id: 3, name: 'warren', email: '123@gmail.com', roles: [{ role: 'diner' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('POST');
+    expect(route.request().postDataJSON()).toMatchObject(regReq);
+    await route.fulfill({ json: regRes });
+  });
+
+
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByRole('heading')).toContainText('The web\'s best pizza');
+
+  await page.getByRole('link', { name: 'Register' }).click();
+  await page.getByPlaceholder('Full name').fill('warren');
+  await page.getByPlaceholder('Full name').press('Tab');
+  await page.getByPlaceholder('Email address').fill('123@gmail.com');
+  await page.getByPlaceholder('Email address').press('Tab');
+  await page.getByPlaceholder('Password').fill('123');
+  await page.getByPlaceholder('Password').press('Tab');
+  await page.locator('div').filter({ hasText: /^Password$/ }).getByRole('button').press('Tab');
+  await expect(page.getByText('Welcome to the party')).toBeVisible();
+  await page.getByRole('button', { name: 'Register' }).click();
+
+});
+
+//passes!
+test('view about information', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByRole('link', { name: 'About' })).toBeVisible();
+  await page.getByRole('link', { name: 'About' }).click();
+  await expect(page.getByText('The secret sauce')).toBeVisible();
+  await expect(page.getByText('© 2024 JWT Pizza LTD. All')).toBeVisible();
+});
+
+//passes!
+test('view history', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'History' }).click();
+  await expect(page.getByText('Mama Rucci, my my')).toBeVisible();
+  await expect(page.getByText('© 2024 JWT Pizza LTD. All')).toBeVisible();
+});
+
+test('view franchise page', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+  await page.getByRole('contentinfo').getByRole('link', { name: 'Franchise' }).click();
+  await expect(page.getByText('So you want a piece of the')).toBeVisible();
+  await expect(page.getByText('© 2024 JWT Pizza LTD. All')).toBeVisible();
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
