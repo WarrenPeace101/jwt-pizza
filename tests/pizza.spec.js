@@ -146,6 +146,7 @@ test('view history', async ({ page }) => {
   await expect(page.getByText('© 2024 JWT Pizza LTD. All')).toBeVisible();
 });
 
+//passes!
 test('view franchise page', async ({ page }) => {
   await page.goto('http://localhost:5173/');
   await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
@@ -153,6 +154,58 @@ test('view franchise page', async ({ page }) => {
   await expect(page.getByText('So you want a piece of the')).toBeVisible();
   await expect(page.getByText('© 2024 JWT Pizza LTD. All')).toBeVisible();
 });
+
+//passes!
+test('access admin franchise page', async ({ page }) => {
+  await page.route('*/**/api/auth', async (route) => {
+    const loginReq = { email: 'd@jwt.com', password: 'a' };
+    const loginRes = { user: { id: 3, name: 'Kai Chen', email: 'd@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('PUT');
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Login' }).click();
+  await page.getByPlaceholder('Email address').fill('d@jwt.com');
+  await page.getByPlaceholder('Email address').press('Tab');
+  await page.getByPlaceholder('Password').fill('a');
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  await page.getByLabel('Global').getByRole('link', { name: 'Admin' }).click();
+  await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
+ });
+
+ test('create a new franchise', async ({ page }) => {
+  await page.route('*/**/api/auth', async (route) => {
+    const loginReq = { email: 'd@jwt.com', password: 'a' };
+    const loginRes = { user: { id: 3, name: 'Kai Chen', email: 'd@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('PUT');
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Login' }).click();
+  await page.getByPlaceholder('Email address').fill('d@jwt.com');
+  await page.getByPlaceholder('Email address').press('Tab');
+  await page.getByPlaceholder('Password').fill('a');
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  await page.getByLabel('Global').getByRole('link', { name: 'Admin' }).click();
+  await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Add Franchise' }).click();
+  await expect(page.getByText('Create franchise', { exact: true })).toBeVisible();
+
+
+ });
+
+
 
 
 
