@@ -156,6 +156,33 @@ test('view franchise page', async ({ page }) => {
 });
 
 //passes!
+test('view diner dashboard', async ({ page }) => {
+  await page.route('*/**/api/auth', async (route) => {
+    const loginReq = { email: 'd@jwt.com', password: 'a' };
+    const loginRes = { user: { id: 3, name: 'Kai Chen', email: 'd@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('PUT');
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+  
+  await page.getByRole('link', { name: 'Login' }).click();
+  await page.getByPlaceholder('Email address').fill('d@jwt.com');
+  await page.getByPlaceholder('Email address').press('Tab');
+  await page.getByPlaceholder('Password').fill('a');
+  await page.getByRole('button', { name: 'Login' }).click();
+
+  await page.getByText('KC').click();
+  await expect(page.getByText('Your pizza kitchen', { exact: true })).toBeVisible();
+  
+
+});
+
+
+
+//passes!
 test('access admin franchise page', async ({ page }) => {
   await page.route('*/**/api/auth', async (route) => {
     const loginReq = { email: 'd@jwt.com', password: 'a' };
