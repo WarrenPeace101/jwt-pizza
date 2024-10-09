@@ -176,10 +176,7 @@ test('view diner dashboard', async ({ page }) => {
 
   await page.getByText('KC').click();
   await expect(page.getByText('Your pizza kitchen', { exact: true })).toBeVisible();
-  
-
 });
-
 
 
 //passes!
@@ -205,23 +202,71 @@ test('access admin franchise page', async ({ page }) => {
   await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
  });
 
- //passes, although the new franchises doesn't appear on the list
+
+ //passes!
  test('create a new franchise', async ({ page }) => {
+  var firstCall = true;
+
   await page.route('*/**/api/auth', async (route) => {
-    const loginReq = { email: 'd@jwt.com', password: 'a' };
-    const loginRes = { user: { id: 3, name: 'Kai Chen', email: 'd@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
+    const loginReq = { email: 'a@jwt.com', password: 'admin' };
+    const loginRes = { user: { id: 1, name: '常用名字', email: 'a@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
     expect(route.request().method()).toBe('PUT');
     expect(route.request().postDataJSON()).toMatchObject(loginReq);
     await route.fulfill({ json: loginRes });
   });
 
+  await page.route('*/**/api/franchise', async (route) => {
+
+    if (route.request().method() == 'POST') {
+      const franchReq = {"name": "new franch", "admins": [{"email": "a@jwt.com"}]};
+      const franchRes = {
+        "name": "new franch",
+        "admins": [
+          {
+            "email": "a@jwt.com",
+            "id": 1,
+            "name": "常用名字"
+          }
+        ],
+        "id": 1}
+
+      expect(route.request().method()).toBe('POST');
+      expect(route.request().postDataJSON()).toMatchObject(franchReq);
+      await route.fulfill({ json: franchRes });
+    }
+    else { //GET request
+      if (Boolean(firstCall)) {
+        firstCall = false;
+        const getResp = []
+
+        expect(route.request().method()).toBe('GET');
+        await route.fulfill({ json: getResp });
+
+      }
+      else {//the second call
+        const getResp = [
+          {
+            "id": 1,
+            "name": "new franch",
+            "stores" : []
+          }
+        ]
+
+        expect(route.request().method()).toBe('GET');
+        await route.fulfill({ json: getResp });
+      }
+    }
+  });
+
+
+
   await page.goto('http://localhost:5173/');
   await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
 
   await page.getByRole('link', { name: 'Login' }).click();
-  await page.getByPlaceholder('Email address').fill('d@jwt.com');
+  await page.getByPlaceholder('Email address').fill('a@jwt.com');
   await page.getByPlaceholder('Email address').press('Tab');
-  await page.getByPlaceholder('Password').fill('a');
+  await page.getByPlaceholder('Password').fill('admin');
   await page.getByRole('button', { name: 'Login' }).click();
 
   await page.getByLabel('Global').getByRole('link', { name: 'Admin' }).click();
@@ -232,14 +277,105 @@ test('access admin franchise page', async ({ page }) => {
 
   await page.getByPlaceholder('franchise name').fill('new franch');
   await page.getByPlaceholder('franchise name').press('Tab');
-  await page.getByPlaceholder('franchisee admin email').fill('d@jwt.com');
+  await page.getByPlaceholder('franchisee admin email').fill('a@jwt.com');
   await page.getByPlaceholder('franchisee admin email').press('Tab');
   await page.getByRole('button', { name: 'Create' }).click();
+
+  //await page.getByLabel('Global').getByRole('link', { name: 'Admin' }).click();
+  await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
+ });
+
+
+
+ test('create a new franchise and then delete it', async ({ page }) => {
+  var firstCall = true;
+
+  await page.route('*/**/api/auth', async (route) => {
+    const loginReq = { email: 'a@jwt.com', password: 'admin' };
+    const loginRes = { user: { id: 1, name: '常用名字', email: 'a@jwt.com', roles: [{ role: 'admin' }] }, token: 'abcdef' };
+    expect(route.request().method()).toBe('PUT');
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
+  await page.route('*/**/api/franchise', async (route) => {
+
+    if (route.request().method() == 'POST') {
+      const franchReq = {"name": "new franch", "admins": [{"email": "a@jwt.com"}]};
+      const franchRes = {
+        "name": "new franch",
+        "admins": [
+          {
+            "email": "a@jwt.com",
+            "id": 1,
+            "name": "常用名字"
+          }
+        ],
+        "id": 1}
+
+      expect(route.request().method()).toBe('POST');
+      expect(route.request().postDataJSON()).toMatchObject(franchReq);
+      await route.fulfill({ json: franchRes });
+    }
+    else { //GET request
+      if (Boolean(firstCall)) {
+        firstCall = false;
+        const getResp = []
+
+        expect(route.request().method()).toBe('GET');
+        await route.fulfill({ json: getResp });
+
+      }
+      else {//the second call
+        const getResp = [
+          {
+            "id": 1,
+            "name": "new franch",
+            "stores" : []
+          }
+        ]
+
+        expect(route.request().method()).toBe('GET');
+        await route.fulfill({ json: getResp });
+      }
+    }
+  });
+
+
+
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+
+  await page.getByRole('link', { name: 'Login' }).click();
+  await page.getByPlaceholder('Email address').fill('a@jwt.com');
+  await page.getByPlaceholder('Email address').press('Tab');
+  await page.getByPlaceholder('Password').fill('admin');
+  await page.getByRole('button', { name: 'Login' }).click();
 
   await page.getByLabel('Global').getByRole('link', { name: 'Admin' }).click();
   await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
 
+  await page.getByRole('button', { name: 'Add Franchise' }).click();
+  await expect(page.getByText('Create franchise', { exact: true })).toBeVisible();
+
+  await page.getByPlaceholder('franchise name').fill('new franch');
+  await page.getByPlaceholder('franchise name').press('Tab');
+  await page.getByPlaceholder('franchisee admin email').fill('a@jwt.com');
+  await page.getByPlaceholder('franchisee admin email').press('Tab');
+  await page.getByRole('button', { name: 'Create' }).click();
+
+  await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
+
+  await page.getByRole('row', { name: 'new franch 常用名字 Close' }).getByRole('button').click();
+  await expect(page.getByText('Sorry to see you go')).toBeVisible();
+  
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect(page.locator('#root div').filter({ hasText: 'Keep the dough rolling and' }).nth(3)).toBeVisible();
+
+
  });
+
+
 
  //passes!
  test('login and then logout', async ({ page }) => {
@@ -271,7 +407,6 @@ test('access admin franchise page', async ({ page }) => {
   await page.getByRole('link', { name: 'Logout' }).click();
   await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
 });
-
 
 
 
