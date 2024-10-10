@@ -287,16 +287,16 @@ test('access admin franchise page', async ({ page }) => {
  });
 
  //passes!
-//  test('call docs', async ({ page }) => {
-//   await page.goto('http://localhost:5173/');
-//   await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
+ test('call docs', async ({ page }) => {
+  await page.goto('http://localhost:5173/');
+  await expect(page.getByText('The web\'s best pizza', { exact: true })).toBeVisible();
  
-//   await page.goto('http://localhost:5173/docs')
+  await page.goto('http://localhost:5173/docs')
     
-//   await expect(page.getByText('JWT Pizza API')).toBeVisible();
-//   await expect(page.getByRole('heading', { name: '[GET] /api/order/menu' })).toBeVisible();
+  await expect(page.getByText('JWT Pizza API')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '[GET] /api/order/menu' })).toBeVisible();
   
-// });
+});
 
 // test('get a users franchises', async ({ page }) => {
 //   var firstCall = true;
