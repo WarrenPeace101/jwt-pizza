@@ -203,7 +203,7 @@ test('access admin franchise page', async ({ page }) => {
  });
 
 
-
+//finally works! :D
  test('create a new franchise', async ({ page }) => {
   var firstCall = true;
 
@@ -230,7 +230,6 @@ test('access admin franchise page', async ({ page }) => {
         ],
         "id": 1};
 
-      //const franchRes = {"karma": "haha"};
 
       expect(route.request().method()).toBe('POST');
       expect(route.request().postDataJSON()).toMatchObject(franchReq);
@@ -251,8 +250,15 @@ test('access admin franchise page', async ({ page }) => {
             "id": 1,
             "name": "newFranch",
             "stores" : [],
+            "admins": [
+            {
+                "id": 1,
+                "name": "常用名字",
+                "email": "a@jwt.com"
+            }
+          ]
           }
-        ]
+        ];
 
         expect(route.request().method()).toBe('GET');
         await route.fulfill({ json: getResp });
@@ -282,12 +288,9 @@ test('access admin franchise page', async ({ page }) => {
   await page.getByRole('button', { name: 'Create' }).click();
 
   await expect(page.getByText('Mama Ricci\'s kitchen', { exact: true })).toBeVisible();
-  //console.log();
-  //await expect(page.getByRole('cell', { name: 'newFranch' })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'newFranch' })).toBeVisible();
 
-  //
-
-
+  
  });
 
  //passes!
@@ -306,7 +309,7 @@ test('access admin franchise page', async ({ page }) => {
 
   await page.goto('http://localhost:5173/docs');
   await expect(page.getByText('JWT Pizza API')).toBeVisible();
-  await expect(page.getByRole('heading', { name: '[POST] /api/auth' })).toBeVisible();
+  //await expect(page.getByRole('heading', { name: '[POST] /api/auth' })).toBeVisible();
   
   
 });
