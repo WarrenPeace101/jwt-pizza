@@ -10,11 +10,11 @@ permissions:
 
 jobs:
   build:
-    name: Update dist artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: package
-      path: dist/
+    - name: Update dist artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: package
+        path: dist/
 
   deploy:
     needs: build
