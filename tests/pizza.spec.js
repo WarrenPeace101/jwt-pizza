@@ -111,7 +111,6 @@ test('register new user', async ({ page }) => {
     await route.fulfill({ json: regRes });
   });
 
-
   await page.goto('http://localhost:5173/');
   await expect(page.getByRole('heading')).toContainText('The web\'s best pizza');
 
