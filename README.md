@@ -149,6 +149,7 @@ export default function App() {
   //...
 ```
 
-### Icons
+#### Icons
 
 [HeroIcons](https://heroicons.com/) - MIT license
+
