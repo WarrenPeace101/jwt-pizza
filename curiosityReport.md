@@ -1,5 +1,5 @@
 
-### Warren's Curiosity Report
+# Warren's Curiosity Report
 ## Password Attacks 
 
 In this class we discussed much about security. As part of the QA process, we should take every opportunity to make our system as secure as possible. This includes becoming familiar with many of the common common attacks. I decided to take a deeper dive into password attacks and password security in general.
@@ -28,7 +28,25 @@ https://us.norton.com/blog/emerging-threats/password-attack
 
 
 
-# Other Good Password Tips
+## Other Good Password Tips
+
+1. Use a password manager
+
+Password managers are better than recording your passwords manually as they
+
+* avoid the risk of exposing your word document
+* enforce good password practice techniques
+* can automatically inject your password into a designated system
+
+2. 
+
+
+## How I Could Have Improved JWT Pizza Security
+
+
+
+
+
 
 
 
