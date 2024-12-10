@@ -2,7 +2,7 @@
 # Warren's Curiosity Report
 ## Password Attacks 
 
-In this class we discussed much about security. As part of the QA process, we should take every opportunity to make our system as secure as possible. This includes becoming familiar with many of the common common attacks. I decided to take a deeper dive into password attacks and password security in general.
+In this class we discussed much about security. As part of the QA process, we should take every opportunity to make our system as secure as possible. This includes becoming familiar with many of the common attacks. I decided to take a deeper dive into password attacks and password security in general.
 
 I started by researching some of the various types of password attacks. There are many forms of password attacks, each of which can be protected against with various measures.
 
