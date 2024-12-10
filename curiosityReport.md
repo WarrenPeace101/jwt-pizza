@@ -38,10 +38,31 @@ Password managers are better than recording your passwords manually as they
 * enforce good password practice techniques
 * can automatically inject your password into a designated system
 
-2. 
+2. Have sufficient complexity
+
+* At least 8 characters in length
+* Use uppercase, lowercase, symbols, and numbers
+* Use a passphrase that is not human readable
+
+3. Be aware of the risk of reusing passwords
+
+If one account does get hacked (which likely will happen at some point), reusing passwords makes your other accounts completely vulnerable. Reusing passwords, while convenient, isn't safe. Consider having different passwords for different applications, especially your most vulnerable assets.
 
 
 ## How I Could Have Improved JWT Pizza Security
+
+1. A password timeout system
+This was one method that I implemented in Deliverable #12. In order to prevent brute force attacks, I created a system that allowed for 5 password misguesses before preventing any more login attempts on a particular email. This prevented massive password guessing on any particular email account, which drastically reduced the risk of brute force attacks.
+
+2. Ensure that many names aren't reused
+Though much of the setup through AWS, we reused many credentials. For example, we named many things 'jwt-pizza'. While this isn't awful, it does run the risk of an intruder being able to guess the name of your services and might make it slightly easier to penetrate. For this reason, creating longer and more specific names could enhance AWS security.
+
+
+## Conclusion
+
+Password attacks have the capability to compromise your system, and are becoming increasingly dangerous with new hacking tools such as AI. As such, we have a great need to ensure that we are taking every precaution. While I have largely been lucky in the past in regards to having my data compromised, I know that everyone's luck eventually runs out. I love the scripture that says, "And now it came to pass that Moroni did not stop making preparations for war, or to defend his people against the Lamanites" (Alma 50:1). In this spirit, I'm grateful for the effective security measures that have been developed in the world of technology. Using the above tips, I hope that I will create secure systems to safeguard both my professional and personal life. 
+
+
 
 
 
