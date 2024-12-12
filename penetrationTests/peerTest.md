@@ -42,7 +42,37 @@ Corrections: I solved this problem by implementing a lockout system for password
 
 ![timeoutSystemCode](peerTestImages/timeoutSystemCode.png)
 
+
 **Matthias Southwick**
+
+I had an interesting experience when I went to hack myself. I was not able to start this assignment until Dec 10, and when I went to change my credentials,  the default admin username and password had already been changed!
+
+
+Knowing that my partner had already hacked me made me much less motivated to try fixing my website.
+
+
+Possible vulnerabilities:
+
+Many of the vulnerabilities are only accessible if you already have admin credentials, so I would start by modifying the default username and password. In fact, I generally like to have sql access to my own database, and this project kind of disallowed that.
+
+Attempt to penetrate you deployment of JWT Pizza. 
+
+I tried several different sql injection attacks on my own server, including creating a user that if not parameterized would drop the menu table
+
+
+![partner1](peerTestImages/partner1.png)
+
+ I also tried doing a second injection, however the value happened to be added to a different value so, I got NaN value. If not for this I suspect it would have worked. 
+
+![partner2](peerTestImages/partner2.png)
+
+
+I tried some XSS attacks, specifically where you put html fields as franchise names or user names, but this didn’t really work
+
+
+![partner3](peerTestImages/partner3.png)
+
+
 
 
 ## Peer Attack
@@ -121,11 +151,60 @@ Corrections:  In doing a real attack, I would focus more resources on guessing m
 
 **Matthias Southwick**
 
+12/11/2024
+
+Target https://pizza-service.warrendeployment.click
+
+Classification: SQL INJECTION ATTACK
+
+Severity: 4
+
+I tried a few different attacks. There were several database calls that did not have parameterized values in the SQL code. 
+
+This included the getOrders() function which did not parameterize the LIMIT value, so by calling the /api/order?page=.05 endpoint, I was able to get information from the call stack that revealed the internal working of the server. 
+
+
+![partner4](peerTestImages/partner4.png)
+
+
+While this attack was not able to do any damage to the database, the errors could be sanitized.
+
+---
+
+12/11/2024
+
+Target https://pizza-service.warrendeployment.click
+
+Classification: Broken Access Control
+
+Severity: 4
+
+Target https://pizza-service.warrendeployment.click
+
+Database server identified
+
+
+![partner5](peerTestImages/partner5.png)
+
+Remove database url from the public config.
+
+Additionally I tried checking all the default passwords, and they had all been changed.
+
+
+![partner6](peerTestImages/partner6.png)
+
+
+
+
+
+
+
 
 
 ## Summary
 
 This was such a fun project! I learned an awful lot about the process of ensuring that your software is secure. By analyzing my own and my partner’s systems, I felt like I had a greater understanding of the mindset that it takes to take down a system—or to defend one from being taken down. There are many technological intricacies to learn; the different types of attacks, the different ways to be alerted to the threats, and many other nuggets of useful information. This project helped me put the pieces together in a way that was new and exciting, giving me a great big picture experience. I’m excited to go out and design more bullet-proof systems!
 
+This was a very good learning experience. I was able to learn about what things make secure software, and about different attacks. I got hacked first, and I realized that I should have changed the default password a long time ago. Hacking a system that was prepared was a lot more difficult, and it really shows the importance of making sure your system is prepared. Overall, pen testing is a very interesting subject, and something I am glad I have learned about in this class.
 
 
