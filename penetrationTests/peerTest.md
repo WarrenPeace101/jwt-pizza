@@ -23,6 +23,8 @@ Description: I noticed when trying to bypass various credentials (like skipping 
 
 Corrections: I didn’t actually fix this problem in my code, as I believe that you would have to modify the Error class that StatusCodeError extends. But in general, you would fix this issue by sanitizing your error messages.
 
+---
+
 
 12/9/2024
 
@@ -61,6 +63,10 @@ Description: Luckily, the default admin credentials were left unaltered. After l
 
 Corrections: The obvious correct would have been to preemptively change the default credentials. I forgot to do this on my own server, and didn’t realize it until I was attacking him, so I went and changed mine immediately after.
 
+
+---
+
+
 12/9/2024
 
 Target: pizza.msouthwick.com
@@ -75,6 +81,10 @@ Description: After I finished executing commands with his admin account, I chang
 
 Correction: This would be hard to fix as while a logging system might record the new username, the corresponding new password should be sanitized.
 
+
+---
+
+
 12/9/2024
 
 Target: pizza.msouthwick.com
@@ -88,6 +98,9 @@ Description: I did a bunch of latency tests using my metrics, and I discovered t
 ![ddosAttack](peerTestImages/ddosattack.png)
 
 Correction: One possible correction to prevent DDOS attacks would be to put a capacity on certain endpoint usage. This would likely need to be adjusted during times of high traffic, which adjustment would be based on the common metrics. Any spike in endpoint usage would put a timer on the call, similar to the password lockout system. 
+
+
+---
 
 
 12/9/2024
