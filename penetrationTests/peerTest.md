@@ -13,6 +13,7 @@ Attack Type: Injection (not really, just database information exposure)
 Severity: IV
 Description: I noticed when trying to bypass various credentials (like skipping a password, etc.), that the database would return the stack frame in the response object. This is a vulnerability as it exposes information about your database to the outside world, making it easier to attack.
 
+![exposingDatabase](peerTestImages/exposingDatabase.png)
 
 
 Corrections: I didn’t actually fix this problem in my code, as I believe that you would have to modify the Error class that StatusCodeError extends. But in general, you would fix this issue by sanitizing your error messages.
